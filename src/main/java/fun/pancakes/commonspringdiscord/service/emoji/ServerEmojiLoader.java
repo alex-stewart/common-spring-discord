@@ -39,12 +39,12 @@ public class ServerEmojiLoader {
                 String name = FilenameUtils.removeExtension(emojiResource.getFilename());
                 InputStream imgFile = emojiResource.getInputStream();
                 emojis.put(new ServerEmoji(name), ImageIO.read(imgFile));
-                log.info("Loaded map tile image {}.", name);
+                log.info("Loaded emoji image {}.", name);
             } catch (Exception e) {
-                log.error("Failed to load tile image {}", emojis, e);
+                log.error("Failed to load emoji images {}", emojis, e);
             }
         }
-        log.info("Loaded map tile images.");
+        log.info("Loaded emoji images.");
     }
 
 }
