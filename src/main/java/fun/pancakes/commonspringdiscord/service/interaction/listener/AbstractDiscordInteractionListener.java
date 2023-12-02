@@ -4,6 +4,7 @@ import fun.pancakes.commonspringdiscord.command.Command;
 import fun.pancakes.commonspringdiscord.command.CommandParameter;
 import fun.pancakes.commonspringdiscord.constant.ResponseColor;
 import fun.pancakes.commonspringdiscord.service.interaction.command.DiscordCommandRequest;
+import io.micrometer.observation.annotation.Observed;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.javacord.api.entity.message.MessageFlag;
@@ -14,6 +15,7 @@ import java.util.EnumSet;
 import java.util.Map;
 
 @Log4j2
+@Observed
 @NoArgsConstructor
 public abstract class AbstractDiscordInteractionListener {
 
