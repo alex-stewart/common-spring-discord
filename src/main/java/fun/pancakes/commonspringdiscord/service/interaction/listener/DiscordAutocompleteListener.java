@@ -2,6 +2,7 @@ package fun.pancakes.commonspringdiscord.service.interaction.listener;
 
 import fun.pancakes.commonspringdiscord.command.CommandParameter;
 import fun.pancakes.commonspringdiscord.service.interaction.autocomplete.CommandOptionChoiceFactory;
+import io.micrometer.observation.annotation.Observed;
 import lombok.extern.log4j.Log4j2;
 import org.javacord.api.event.interaction.AutocompleteCreateEvent;
 import org.javacord.api.interaction.AutocompleteInteraction;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Log4j2
 @Component
+@Observed(name = "discordAutocompleteListener")
 public class DiscordAutocompleteListener implements AutocompleteCreateListener {
 
     private final Map<CommandParameter, CommandOptionChoiceFactory> autoCompleterMap;

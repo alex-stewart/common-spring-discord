@@ -2,6 +2,7 @@ package fun.pancakes.commonspringdiscord.service.interaction.listener;
 
 import fun.pancakes.commonspringdiscord.command.Command;
 import fun.pancakes.commonspringdiscord.command.CommandParameter;
+import io.micrometer.observation.annotation.Observed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Log4j2
 @Component
+@Observed(name = "discordSlashCommandCreateListener")
 @RequiredArgsConstructor
 public class DiscordSlashCommandCreateListener extends AbstractDiscordInteractionListener implements SlashCommandCreateListener {
 
