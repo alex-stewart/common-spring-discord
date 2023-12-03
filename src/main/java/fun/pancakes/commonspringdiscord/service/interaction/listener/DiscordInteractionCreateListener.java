@@ -2,8 +2,7 @@ package fun.pancakes.commonspringdiscord.service.interaction.listener;
 
 import fun.pancakes.commonspringdiscord.command.Command;
 import fun.pancakes.commonspringdiscord.command.CommandParameter;
-import io.micrometer.observation.annotation.Observed;
-import lombok.RequiredArgsConstructor;
+import io.micrometer.observation.ObservationRegistry;
 import lombok.extern.log4j.Log4j2;
 import org.javacord.api.event.interaction.InteractionCreateEvent;
 import org.javacord.api.interaction.InteractionBase;
@@ -16,11 +15,15 @@ import java.util.Map;
 
 @Log4j2
 @Component
-@Observed(name = "discordInteractionCreateListener")
-@RequiredArgsConstructor
 public class DiscordInteractionCreateListener extends AbstractDiscordInteractionListener implements InteractionCreateListener {
 
     private final List<Command> commands;
+
+    public DiscordInteractionCreateListener(ObservationRegistry observationRegistry,
+                                            List<Command> commands) {
+        super(observationRegistry);
+        this.commands = commands;
+    }
 
     @Override
     public void onInteractionCreate(InteractionCreateEvent event) {
