@@ -1,7 +1,7 @@
 package fun.pancakes.commonspringdiscord.service.interaction.listener;
 
 import fun.pancakes.commonspringdiscord.command.Command;
-import fun.pancakes.commonspringdiscord.command.CommandParameter;
+import fun.pancakes.commonspringdiscord.command.parameter.CommandParameter;
 import fun.pancakes.commonspringdiscord.constant.ResponseColor;
 import fun.pancakes.commonspringdiscord.service.interaction.command.DiscordCommandRequest;
 import io.micrometer.observation.Observation;
@@ -21,7 +21,7 @@ public abstract class AbstractDiscordInteractionListener {
 
     private final ObservationRegistry observationRegistry;
 
-    protected abstract Map<CommandParameter, String> getCommandArguments(InteractionBase interaction, Command command);
+    protected abstract Map<String, String> getCommandArguments(InteractionBase interaction, Command command);
 
     protected void handleCommand(Command command, InteractionBase interaction) {
         String userId = interaction.getUser().getIdAsString();
@@ -33,7 +33,7 @@ public abstract class AbstractDiscordInteractionListener {
                 .highCardinalityKeyValue("user", userId)
                 .observe(() -> {
                     try {
-                        Map<CommandParameter, String> arguments = getCommandArguments(interaction, command);
+                        Map<String, String> arguments = getCommandArguments(interaction, command);
                         DiscordCommandRequest commandRequest = new DiscordCommandRequest(interaction, arguments);
                         command.handle(commandRequest);
                     } catch (Exception e) {

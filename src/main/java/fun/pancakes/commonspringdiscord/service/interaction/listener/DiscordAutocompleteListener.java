@@ -1,6 +1,5 @@
 package fun.pancakes.commonspringdiscord.service.interaction.listener;
 
-import fun.pancakes.commonspringdiscord.command.CommandParameter;
 import fun.pancakes.commonspringdiscord.service.interaction.autocomplete.CommandOptionChoiceFactory;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 @Component
 public class DiscordAutocompleteListener implements AutocompleteCreateListener {
 
-    private final Map<CommandParameter, CommandOptionChoiceFactory> autoCompleterMap;
+    private final Map<String, CommandOptionChoiceFactory> autoCompleterMap;
     private final ObservationRegistry observationRegistry;
 
     public DiscordAutocompleteListener(List<CommandOptionChoiceFactory> commandOptionChoiceFactoryList,
@@ -41,8 +40,7 @@ public class DiscordAutocompleteListener implements AutocompleteCreateListener {
                 .highCardinalityKeyValue("interaction", interaction.getIdAsString())
                 .observe(() -> {
                     try {
-                        CommandParameter commandParameter = CommandParameter.ofName(option);
-                        List<SlashCommandOptionChoice> choices = autoCompleterMap.get(commandParameter)
+                        List<SlashCommandOptionChoice> choices = autoCompleterMap.get(option)
                                 .autocompleteInteractionCommandOptionChoices(interaction);
                         interaction.respondWithChoices(choices);
                     } catch (Exception e) {

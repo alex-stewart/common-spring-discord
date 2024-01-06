@@ -1,7 +1,7 @@
 package fun.pancakes.commonspringdiscord.service.interaction.listener;
 
 import fun.pancakes.commonspringdiscord.command.Command;
-import fun.pancakes.commonspringdiscord.command.CommandParameter;
+import fun.pancakes.commonspringdiscord.command.parameter.CommandParameter;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.extern.log4j.Log4j2;
 import org.javacord.api.event.interaction.InteractionCreateEvent;
@@ -49,10 +49,10 @@ public class DiscordInteractionCreateListener extends AbstractDiscordInteraction
     }
 
     @Override
-    protected Map<CommandParameter, String> getCommandArguments(InteractionBase interaction, Command command) {
+    protected Map<String, String> getCommandArguments(InteractionBase interaction, Command command) {
         MessageComponentInteraction messageComponentInteraction = (MessageComponentInteraction) interaction;
         String parameter = messageComponentInteraction.getCustomId().split("_")[1];
         String value = messageComponentInteraction.getCustomId().split("_")[2];
-        return Map.of(CommandParameter.ofName(parameter), value);
+        return Map.of(parameter, value);
     }
 }

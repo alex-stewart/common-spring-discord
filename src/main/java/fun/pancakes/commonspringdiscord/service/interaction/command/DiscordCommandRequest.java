@@ -1,6 +1,6 @@
 package fun.pancakes.commonspringdiscord.service.interaction.command;
 
-import fun.pancakes.commonspringdiscord.command.CommandParameter;
+import fun.pancakes.commonspringdiscord.command.parameter.CommandParameter;
 import fun.pancakes.commonspringdiscord.command.CommandPrompt;
 import fun.pancakes.commonspringdiscord.command.CommandRequest;
 import fun.pancakes.commonspringdiscord.constant.ResponseColor;
@@ -35,7 +35,7 @@ public class DiscordCommandRequest implements CommandRequest {
     private final InteractionBase interactionBase;
 
     @Getter
-    private final Map<CommandParameter, String> arguments;
+    private final Map<String, String> arguments;
 
     public Instant getTime() {
         return interactionBase.getCreationTimestamp();

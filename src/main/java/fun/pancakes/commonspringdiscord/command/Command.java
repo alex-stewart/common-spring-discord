@@ -1,5 +1,6 @@
 package fun.pancakes.commonspringdiscord.command;
 
+import fun.pancakes.commonspringdiscord.command.parameter.CommandParameter;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.ArrayList;

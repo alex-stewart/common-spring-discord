@@ -1,7 +1,7 @@
 package fun.pancakes.commonspringdiscord.service.interaction;
 
 import fun.pancakes.commonspringdiscord.command.Command;
-import fun.pancakes.commonspringdiscord.command.CommandParameter;
+import fun.pancakes.commonspringdiscord.command.parameter.CommandParameter;
 import fun.pancakes.commonspringdiscord.command.CommandParameterChoice;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

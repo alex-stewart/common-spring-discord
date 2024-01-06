@@ -1,7 +1,7 @@
 package fun.pancakes.commonspringdiscord.service.interaction.listener;
 
 import fun.pancakes.commonspringdiscord.command.Command;
-import fun.pancakes.commonspringdiscord.command.CommandParameter;
+import fun.pancakes.commonspringdiscord.command.parameter.CommandParameter;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.extern.log4j.Log4j2;
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
@@ -40,14 +40,15 @@ public class DiscordSlashCommandCreateListener extends AbstractDiscordInteractio
     }
 
     @Override
-    protected Map<CommandParameter, String> getCommandArguments(InteractionBase interaction, Command command) {
+    protected Map<String, String> getCommandArguments(InteractionBase interaction, Command command) {
         SlashCommandInteraction slashCommandInteraction = (SlashCommandInteraction) interaction;
         return command.getParameters()
                 .stream()
-                .filter(parameter -> slashCommandInteraction.getOptionByName(parameter.getName()).isPresent())
+                .map(CommandParameter::getName)
+                .filter(parameter -> slashCommandInteraction.getOptionByName(parameter).isPresent())
                 .collect(Collectors.toMap(
                         Function.identity(),
-                        parameter -> slashCommandInteraction.getOptionByName(parameter.getName()).get().getStringValue().get()));
+                        parameter -> slashCommandInteraction.getOptionByName(parameter).get().getStringValue().get()));
     }
 
     private boolean isSlashCommandOfTypeCommand(SlashCommandInteraction slashCommandInteraction, Command command) {

@@ -1,5 +1,7 @@
 package fun.pancakes.commonspringdiscord.command;
 
+import fun.pancakes.commonspringdiscord.command.parameter.CommandParameter;
+
 import java.awt.image.BufferedImage;
 import java.time.Instant;
 import java.util.Map;
