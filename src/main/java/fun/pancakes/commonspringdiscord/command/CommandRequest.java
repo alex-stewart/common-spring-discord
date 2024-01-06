@@ -1,7 +1,5 @@
 package fun.pancakes.commonspringdiscord.command;
 
-import fun.pancakes.commonspringdiscord.command.parameter.CommandParameter;
-
 import java.awt.image.BufferedImage;
 import java.time.Instant;
 import java.util.Map;
@@ -13,7 +11,7 @@ public interface CommandRequest {
 
     String getUserId();
 
-    Map<CommandParameter, String> getArguments();
+    Map<String, String> getArguments();
 
     void respondWithError(String response);
 

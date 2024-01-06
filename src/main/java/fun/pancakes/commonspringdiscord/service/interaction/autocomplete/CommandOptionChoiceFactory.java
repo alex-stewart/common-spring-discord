@@ -6,7 +6,7 @@ import org.javacord.api.interaction.SlashCommandOptionChoice;
 import java.util.List;
 
 public interface CommandOptionChoiceFactory {
-    
+
     String getCommandParameter();
 
     List<SlashCommandOptionChoice> autocompleteInteractionCommandOptionChoices(AutocompleteInteraction autocompleteInteraction);

@@ -1,14 +1,12 @@
 package fun.pancakes.commonspringdiscord.command.parameter;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 @EqualsAndHashCode(callSuper = true)
+@Builder
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class UserCommandParameter extends CommandParameter {
 
 }

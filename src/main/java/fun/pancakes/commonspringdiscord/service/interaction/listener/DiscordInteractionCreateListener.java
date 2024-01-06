@@ -1,7 +1,6 @@
 package fun.pancakes.commonspringdiscord.service.interaction.listener;
 
 import fun.pancakes.commonspringdiscord.command.Command;
-import fun.pancakes.commonspringdiscord.command.parameter.CommandParameter;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.extern.log4j.Log4j2;
 import org.javacord.api.event.interaction.InteractionCreateEvent;

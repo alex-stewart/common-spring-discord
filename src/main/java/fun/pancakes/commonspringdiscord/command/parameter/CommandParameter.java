@@ -1,12 +1,10 @@
 package fun.pancakes.commonspringdiscord.command.parameter;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public abstract class CommandParameter {
 
     private String name;

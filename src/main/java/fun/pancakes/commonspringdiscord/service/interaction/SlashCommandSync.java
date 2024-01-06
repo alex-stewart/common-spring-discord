@@ -1,8 +1,10 @@
 package fun.pancakes.commonspringdiscord.service.interaction;
 
 import fun.pancakes.commonspringdiscord.command.Command;
-import fun.pancakes.commonspringdiscord.command.parameter.CommandParameter;
 import fun.pancakes.commonspringdiscord.command.CommandParameterChoice;
+import fun.pancakes.commonspringdiscord.command.parameter.ChoiceCommandParameter;
+import fun.pancakes.commonspringdiscord.command.parameter.CommandParameter;
+import fun.pancakes.commonspringdiscord.command.parameter.UserCommandParameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.javacord.api.DiscordApi;
@@ -58,19 +60,23 @@ public class SlashCommandSync {
 
     private SlashCommandOption buildDiscordSlashCommandOption(CommandParameter commandParameter) {
         SlashCommandOptionBuilder slashCommandOptionBuilder = new SlashCommandOptionBuilder()
-                .setType(SlashCommandOptionType.STRING)
                 .setName(commandParameter.getName())
                 .setDescription(commandParameter.getDescription())
-                .setRequired(true)
-                .setAutocompletable(commandParameter.isAutocomplete());
+                .setRequired(true);
 
-
-        if (commandParameter.getCommandParameterChoices() != null) {
-            slashCommandOptionBuilder.setChoices(
-                    commandParameter.getCommandParameterChoices().stream()
-                            .map(this::buildDiscordSlashCommandOptionChoice)
-                            .collect(Collectors.toList())
-            );
+        if (commandParameter instanceof ChoiceCommandParameter choiceCommandParameter) {
+            slashCommandOptionBuilder
+                    .setType(SlashCommandOptionType.STRING)
+                    .setAutocompletable(choiceCommandParameter.isAutocomplete());
+            if (choiceCommandParameter.getCommandParameterChoices() != null) {
+                slashCommandOptionBuilder.setChoices(
+                        choiceCommandParameter.getCommandParameterChoices().stream()
+                                .map(this::buildDiscordSlashCommandOptionChoice)
+                                .collect(Collectors.toList())
+                );
+            }
+        } else if (commandParameter instanceof UserCommandParameter) {
+            slashCommandOptionBuilder.setType(SlashCommandOptionType.USER);
         }
 
         return slashCommandOptionBuilder.build();

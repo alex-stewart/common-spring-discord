@@ -1,7 +1,6 @@
 package fun.pancakes.commonspringdiscord.service.interaction.listener;
 
 import fun.pancakes.commonspringdiscord.command.Command;
-import fun.pancakes.commonspringdiscord.command.parameter.CommandParameter;
 import fun.pancakes.commonspringdiscord.constant.ResponseColor;
 import fun.pancakes.commonspringdiscord.service.interaction.command.DiscordCommandRequest;
 import io.micrometer.observation.Observation;
