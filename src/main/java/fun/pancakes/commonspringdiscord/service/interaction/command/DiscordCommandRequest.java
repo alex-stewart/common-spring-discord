@@ -44,6 +44,10 @@ public class DiscordCommandRequest implements CommandRequest {
         return interactionBase.getUser().getIdAsString();
     }
 
+    public String getServerId() {
+        return interactionBase.getServer().orElseThrow().getIdAsString();
+    }
+
     public void respondWithError(String response) {
         respondWithContent(interactionBase, ResponseColor.ERROR, response);
     }

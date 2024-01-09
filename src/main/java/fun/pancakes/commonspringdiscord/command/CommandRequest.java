@@ -11,6 +11,8 @@ public interface CommandRequest {
 
     String getUserId();
 
+    String getServerId();
+
     Map<String, String> getArguments();
 
     void respondWithError(String response);
