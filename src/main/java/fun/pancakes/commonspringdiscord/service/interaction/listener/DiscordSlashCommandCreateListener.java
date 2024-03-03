@@ -2,11 +2,13 @@ package fun.pancakes.commonspringdiscord.service.interaction.listener;
 
 import fun.pancakes.commonspringdiscord.command.Command;
 import fun.pancakes.commonspringdiscord.command.parameter.CommandParameter;
+import fun.pancakes.commonspringdiscord.exception.DiscordException;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.extern.log4j.Log4j2;
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
 import org.javacord.api.interaction.InteractionBase;
 import org.javacord.api.interaction.SlashCommandInteraction;
+import org.javacord.api.interaction.SlashCommandInteractionOption;
 import org.javacord.api.listener.interaction.SlashCommandCreateListener;
 import org.springframework.stereotype.Component;
 
@@ -48,7 +50,13 @@ public class DiscordSlashCommandCreateListener extends AbstractDiscordInteractio
                 .filter(parameter -> slashCommandInteraction.getOptionByName(parameter).isPresent())
                 .collect(Collectors.toMap(
                         Function.identity(),
-                        parameter -> slashCommandInteraction.getOptionByName(parameter).get().getStringValue().get()));
+                        parameter -> getParameterAsString(slashCommandInteraction, parameter)));
+    }
+
+    private String getParameterAsString(SlashCommandInteraction slashCommandInteraction, String parameterName) {
+        return slashCommandInteraction.getOptionByName(parameterName)
+                .flatMap(SlashCommandInteractionOption::getStringRepresentationValue)
+                .orElseThrow(() -> new DiscordException(""));
     }
 
     private boolean isSlashCommandOfTypeCommand(SlashCommandInteraction slashCommandInteraction, Command command) {

@@ -62,7 +62,7 @@ public class DiscordCommandRequest implements CommandRequest {
                 .respond()
                 .whenCompleteAsync((interactionOriginalResponseUpdater, ex) -> {
                     if (ex != null) {
-                        log.error("Failed to response to interaction {} with map image", interactionBase.getIdAsString(), ex);
+                        log.error("Failed to response to interaction {} with image", interactionBase.getIdAsString(), ex);
                     } else {
                         BufferedImage bufferedImage = null;
 
@@ -78,7 +78,7 @@ public class DiscordCommandRequest implements CommandRequest {
                                 .update()
                                 .whenCompleteAsync((responseUpdater, ex2) -> {
                                     if (ex2 != null) {
-                                        log.error("Failed to update response with map image", ex2);
+                                        log.error("Failed to update response with image", ex2);
                                     }
                                 });
                     }

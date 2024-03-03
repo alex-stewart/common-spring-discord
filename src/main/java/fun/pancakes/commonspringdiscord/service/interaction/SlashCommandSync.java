@@ -4,6 +4,7 @@ import fun.pancakes.commonspringdiscord.command.Command;
 import fun.pancakes.commonspringdiscord.command.CommandParameterChoice;
 import fun.pancakes.commonspringdiscord.command.parameter.ChoiceCommandParameter;
 import fun.pancakes.commonspringdiscord.command.parameter.CommandParameter;
+import fun.pancakes.commonspringdiscord.command.parameter.NumberCommandParameter;
 import fun.pancakes.commonspringdiscord.command.parameter.UserCommandParameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -64,7 +65,10 @@ public class SlashCommandSync {
                 .setDescription(commandParameter.getDescription())
                 .setRequired(true);
 
-        if (commandParameter instanceof ChoiceCommandParameter choiceCommandParameter) {
+        if (commandParameter instanceof NumberCommandParameter numberCommandParameter) {
+            slashCommandOptionBuilder
+                    .setType(SlashCommandOptionType.LONG);
+        } else if (commandParameter instanceof ChoiceCommandParameter choiceCommandParameter) {
             slashCommandOptionBuilder
                     .setType(SlashCommandOptionType.STRING)
                     .setAutocompletable(choiceCommandParameter.isAutocomplete());

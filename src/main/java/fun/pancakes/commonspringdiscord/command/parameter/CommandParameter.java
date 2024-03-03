@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public abstract class CommandParameter {
 
-    private String name;
-    private String description;
+    protected String name;
+    protected String description;
 
 }

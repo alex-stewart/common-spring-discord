@@ -2,6 +2,7 @@ package fun.pancakes.commonspringdiscord.service.interaction.listener;
 
 import fun.pancakes.commonspringdiscord.command.Command;
 import fun.pancakes.commonspringdiscord.constant.ResponseColor;
+import fun.pancakes.commonspringdiscord.exception.DiscordException;
 import fun.pancakes.commonspringdiscord.service.interaction.command.DiscordCommandRequest;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
@@ -35,9 +36,12 @@ public abstract class AbstractDiscordInteractionListener {
                         Map<String, String> arguments = getCommandArguments(interaction, command);
                         DiscordCommandRequest commandRequest = new DiscordCommandRequest(interaction, arguments);
                         command.handle(commandRequest);
+                    } catch (DiscordException e) {
+                        log.error("Caught DiscordException when handling command {} interaction {}", command.getName(), interactionId, e);
+                        respondWithError(interaction, e.getUserMessage());
                     } catch (Exception e) {
-                        log.error("Caught exception when handling command {} interaction {}", command.getName(), interactionId, e);
-                        respondWithError(interaction, e.getMessage());
+                        log.error("Caught Exception when handling command {} interaction {}", command.getName(), interactionId, e);
+                        respondWithError(interaction, "Unexpected Error.");
                     }
                 });
     }
