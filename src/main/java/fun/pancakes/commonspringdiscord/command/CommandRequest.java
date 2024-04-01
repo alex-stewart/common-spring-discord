@@ -13,6 +13,8 @@ public interface CommandRequest {
 
     String getServerId();
 
+    String getChannelId();
+
     Map<String, String> getArguments();
 
     void respondWithError(String response);

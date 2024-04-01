@@ -48,6 +48,10 @@ public class DiscordCommandRequest implements CommandRequest {
         return interactionBase.getServer().orElseThrow().getIdAsString();
     }
 
+    public String getChannelId() {
+        return interactionBase.getChannel().orElseThrow().getIdAsString();
+    }
+
     public void respondWithError(String response) {
         respondWithContent(interactionBase, ResponseColor.ERROR, response);
     }

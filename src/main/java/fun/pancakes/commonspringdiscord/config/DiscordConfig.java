@@ -3,7 +3,6 @@ package fun.pancakes.commonspringdiscord.config;
 import lombok.extern.log4j.Log4j2;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -14,10 +13,14 @@ import org.springframework.context.annotation.Configuration;
 public class DiscordConfig {
 
     @Bean
-    public DiscordApi discordApi(@Value("${discord.bot.token}") String discordBotToken) {
-        log.debug("Authenticating discord bot with token: {}", discordBotToken);
+    public DiscordProperties discordProperties() {
+        return new DiscordProperties();
+    }
+
+    @Bean
+    public DiscordApi discordApi(DiscordProperties discordProperties) {
         return new DiscordApiBuilder()
-                .setToken(discordBotToken)
+                .setToken(discordProperties.getBotToken())
                 .login().join();
     }
 
