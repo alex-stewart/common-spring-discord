@@ -17,11 +17,11 @@ public class DiscordMessageService implements MessageService {
 
     private final DiscordApi discordApi;
 
-    public void sendMessageToLocation(String worldId, String locationId, String message) {
-        sendMessageToLocation(worldId, locationId, message, new String[]{});
+    public void sendMessageToLocation(String serverId, String locationId, String message) {
+        sendMessageToLocation(serverId, locationId, message, new String[]{});
     }
 
-    public void sendMessageToLocation(String worldId, String locationId, String message, String[] userMentions) {
+    public void sendMessageToLocation(String serverId, String locationId, String message, String[] userMentions) {
         String formattedMessage = message;
         for (String userMention : userMentions) {
             formattedMessage = formattedMessage.replaceFirst("%s", String.format("<@%s>", userMention));
@@ -44,11 +44,11 @@ public class DiscordMessageService implements MessageService {
                 });
     }
 
-    public void sendMessageToUser(String worldId, String userId, String message) {
-        sendMessageToUser(worldId, userId, message, new String[]{});
+    public void sendMessageToUser(String serverId, String userId, String message) {
+        sendMessageToUser(serverId, userId, message, new String[]{});
     }
 
-    public void sendMessageToUser(String worldName, String userId, String message, String[] userMentions) {
+    public void sendMessageToUser(String serverName, String userId, String message, String[] userMentions) {
         String formattedMessage = message;
         for (String userMention : userMentions) {
             formattedMessage = formattedMessage.replaceFirst("%s", String.format("<@%s>", userMention));
@@ -59,7 +59,7 @@ public class DiscordMessageService implements MessageService {
         log.info("Sending message to discord user {} : {}", userId, message);
         EmbedBuilder embed = new EmbedBuilder()
                 .setColor(ResponseColor.DEFAULT)
-                .addField("", worldName)
+                .addField("", serverName)
                 .addField("message", formattedMessage);
 
         discordApi.getUserById(userId)
