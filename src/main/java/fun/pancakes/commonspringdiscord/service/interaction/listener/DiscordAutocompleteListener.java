@@ -41,7 +41,9 @@ public class DiscordAutocompleteListener implements AutocompleteCreateListener {
                 .observe(() -> {
                     try {
                         List<SlashCommandOptionChoice> choices = autoCompleterMap.get(option)
-                                .autocompleteInteractionCommandOptionChoices(interaction);
+                                .autocompleteInteractionCommandOptionChoices(interaction).stream()
+                                .limit(25)
+                                .toList();
                         interaction.respondWithChoices(choices);
                     } catch (Exception e) {
                         log.error("Failed to build autocomplete options for interaction: {}", interaction.getIdAsString(), e);
