@@ -34,7 +34,7 @@ public abstract class AbstractDiscordInteractionListener {
                 .observe(() -> {
                     try {
                         Map<String, String> arguments = getCommandArguments(interaction, command);
-                        DiscordCommandRequest commandRequest = new DiscordCommandRequest(interaction, arguments);
+                        DiscordCommandRequest commandRequest = new DiscordCommandRequest(interaction, command, arguments);
                         command.handle(commandRequest);
                     } catch (DiscordException e) {
                         log.error("Caught DiscordException when handling command {} interaction {}", command.getName(), interactionId, e);
