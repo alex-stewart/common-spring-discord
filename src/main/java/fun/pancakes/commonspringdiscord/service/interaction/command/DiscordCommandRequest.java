@@ -1,5 +1,6 @@
 package fun.pancakes.commonspringdiscord.service.interaction.command;
 
+import fun.pancakes.commonspringdiscord.command.Command;
 import fun.pancakes.commonspringdiscord.command.CommandPrompt;
 import fun.pancakes.commonspringdiscord.command.CommandRequest;
 import fun.pancakes.commonspringdiscord.constant.ResponseColor;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 public class DiscordCommandRequest implements CommandRequest {
 
     private final InteractionBase interactionBase;
+    private final Command command;
 
     @Getter
     private final Map<String, String> arguments;
@@ -53,11 +55,11 @@ public class DiscordCommandRequest implements CommandRequest {
     }
 
     public void respondWithError(String response) {
-        respondWithContent(interactionBase, ResponseColor.ERROR, response);
+        respondWithContent(interactionBase, ResponseColor.ERROR, response, true);
     }
 
     public void respondWithSuccess(String response) {
-        respondWithContent(interactionBase, ResponseColor.SUCCESS, response);
+        respondWithContent(interactionBase, ResponseColor.SUCCESS, response, command.isResponseHidden());
     }
 
     public void respondWithImage(Supplier<BufferedImage> bufferedImageSupplier, String fileName) {
@@ -126,16 +128,22 @@ public class DiscordCommandRequest implements CommandRequest {
                 .orElseThrow(() -> new DiscordException("Emoji with name not found."));
     }
 
-    private void respondWithContent(InteractionBase interactionBase, Color colour, String response) {
-        interactionBase.createImmediateResponder()
+    private void respondWithContent(InteractionBase interactionBase, Color colour, String response, boolean isHidden) {
+        InteractionImmediateResponseBuilder interactionImmediateResponseBuilder = interactionBase.createImmediateResponder()
                 .addEmbed(new EmbedBuilder()
                         .setColor(colour)
-                        .addField("", response))
-                .setFlags(EnumSet.of(MessageFlag.EPHEMERAL))
+                        .addField("", response));
+
+        if (isHidden) {
+            interactionImmediateResponseBuilder
+                    .setFlags(EnumSet.of(MessageFlag.EPHEMERAL));
+        }
+
+        interactionImmediateResponseBuilder
                 .respond()
                 .whenCompleteAsync((responseUpdater, ex) -> {
                     if (ex != null) {
-                        log.error("Failed to response to interaction {} with content {}", interactionBase::getIdAsString, () -> response);
+                        log.error("Failed to response to interaction {}", interactionBase::getIdAsString, () -> ex);
                     }
                 });
     }
