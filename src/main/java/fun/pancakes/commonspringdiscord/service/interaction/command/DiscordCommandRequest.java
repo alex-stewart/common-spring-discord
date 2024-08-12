@@ -55,11 +55,29 @@ public class DiscordCommandRequest implements CommandRequest {
     }
 
     public void respondWithError(String response) {
-        respondWithContent(interactionBase, ResponseColor.ERROR, response, true);
+        respondWithContent(interactionBase, ResponseColor.ERROR, String.format("%s - Failed", command.getName()), response, true);
     }
 
     public void respondWithSuccess(String response) {
-        respondWithContent(interactionBase, ResponseColor.SUCCESS, response, command.isResponseHidden());
+        respondWithContent(interactionBase, ResponseColor.SUCCESS, command.getName(), response, command.isResponseHidden());
+    }
+
+    public void respondWithSimpleText(String response) {
+        InteractionImmediateResponseBuilder interactionImmediateResponseBuilder = interactionBase.createImmediateResponder()
+                .setContent(response);
+
+        if (command.isResponseHidden()) {
+            interactionImmediateResponseBuilder
+                    .setFlags(EnumSet.of(MessageFlag.EPHEMERAL));
+        }
+
+        interactionImmediateResponseBuilder
+                .respond()
+                .whenCompleteAsync((responseUpdater, ex) -> {
+                    if (ex != null) {
+                        log.error("Failed to respond simple text to interaction {}", interactionBase::getIdAsString, () -> ex);
+                    }
+                });
     }
 
     public void respondWithImage(Supplier<BufferedImage> bufferedImageSupplier, String fileName) {
@@ -128,10 +146,11 @@ public class DiscordCommandRequest implements CommandRequest {
                 .orElseThrow(() -> new DiscordException("Emoji with name not found."));
     }
 
-    private void respondWithContent(InteractionBase interactionBase, Color colour, String response, boolean isHidden) {
+    private void respondWithContent(InteractionBase interactionBase, Color colour, String title, String response, boolean isHidden) {
         InteractionImmediateResponseBuilder interactionImmediateResponseBuilder = interactionBase.createImmediateResponder()
                 .addEmbed(new EmbedBuilder()
                         .setColor(colour)
+                        .setTitle(title)
                         .addField("", response));
 
         if (isHidden) {
@@ -143,7 +162,7 @@ public class DiscordCommandRequest implements CommandRequest {
                 .respond()
                 .whenCompleteAsync((responseUpdater, ex) -> {
                     if (ex != null) {
-                        log.error("Failed to response to interaction {}", interactionBase::getIdAsString, () -> ex);
+                        log.error("Failed to respond with content to interaction {}", interactionBase::getIdAsString, () -> ex);
                     }
                 });
     }

@@ -21,6 +21,8 @@ public interface CommandRequest {
 
     void respondWithSuccess(String response);
 
+    void respondWithSimpleText(String response);
+
     void respondWithImage(Supplier<BufferedImage> bufferedImageSupplier, String fileName);
 
     void respondWithPrompt(CommandPrompt prompt);
