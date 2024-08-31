@@ -2,6 +2,7 @@ package fun.pancakes.commonspringdiscord.command.info;
 
 import fun.pancakes.commonspringdiscord.command.Command;
 import fun.pancakes.commonspringdiscord.command.CommandRequest;
+import fun.pancakes.commonspringdiscord.command.SubCommand;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +25,7 @@ public class HelpCommand extends Command {
     @Override
     public void handle(CommandRequest commandRequest) {
         String commandList = commands.stream()
+                .filter(c -> !(c instanceof SubCommand))
                 .map(this::formatCommand)
                 .collect(Collectors.joining("\n"));
 
@@ -32,7 +34,17 @@ public class HelpCommand extends Command {
     }
 
     private String formatCommand(Command command) {
-        return String.format("`/%s` - %s", command.getName(), command.getDescription());
+        if (command.getSubCommands().isEmpty()) {
+            return String.format("`/%s` - %s", command.getName(), command.getDescription());
+        } else {
+            return command.getSubCommands().stream()
+                    .map(sc -> formatSubCommand(command.getName(), sc))
+                    .collect(Collectors.joining("\n"));
+        }
+    }
+
+    private String formatSubCommand(String command, SubCommand subCommand) {
+        return String.format("`/%s %s` - %s", command, subCommand.getName(), subCommand.getDescription());
     }
 
 }

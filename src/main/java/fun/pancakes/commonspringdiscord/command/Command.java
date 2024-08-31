@@ -13,6 +13,10 @@ public abstract class Command {
 
     public abstract String getDescription();
 
+    public List<SubCommand> getSubCommands() {
+        return new ArrayList<>();
+    }
+
     public boolean isResponseHidden() {
         return true;
     }

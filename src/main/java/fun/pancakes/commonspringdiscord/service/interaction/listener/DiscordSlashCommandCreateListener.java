@@ -53,6 +53,13 @@ public class DiscordSlashCommandCreateListener extends AbstractDiscordInteractio
                         parameter -> getParameterAsString(slashCommandInteraction, parameter)));
     }
 
+    @Override
+    protected boolean containsArgument(InteractionBase interaction, String argument) {
+        SlashCommandInteraction slashCommandInteraction = (SlashCommandInteraction) interaction;
+        return slashCommandInteraction.getOptionByName(argument)
+                .isPresent();
+    }
+
     private String getParameterAsString(SlashCommandInteraction slashCommandInteraction, String parameterName) {
         return slashCommandInteraction.getOptionByName(parameterName)
                 .flatMap(SlashCommandInteractionOption::getStringRepresentationValue)

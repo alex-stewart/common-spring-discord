@@ -2,6 +2,7 @@ package fun.pancakes.commonspringdiscord.service.interaction;
 
 import fun.pancakes.commonspringdiscord.command.Command;
 import fun.pancakes.commonspringdiscord.command.CommandParameterChoice;
+import fun.pancakes.commonspringdiscord.command.SubCommand;
 import fun.pancakes.commonspringdiscord.command.parameter.*;
 import fun.pancakes.commonspringdiscord.config.DiscordProperties;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class SlashCommandSync {
     public void sync() {
         log.info("Syncing global commands.");
         Set<SlashCommandBuilder> slashCommands = commands.stream()
+                .filter(c -> !(c instanceof SubCommand))
                 .map(this::buildDiscordSlashCommand)
                 .collect(Collectors.toSet());
         discordApi.bulkOverwriteGlobalApplicationCommands(slashCommands)
@@ -51,9 +53,16 @@ public class SlashCommandSync {
     }
 
     private SlashCommandBuilder buildDiscordSlashCommand(Command command) {
-        List<SlashCommandOption> options = command.getParameters().stream()
-                .map(this::buildDiscordSlashCommandOption)
-                .toList();
+        List<SlashCommandOption> options;
+        if (!command.getSubCommands().isEmpty()) {
+            options = command.getSubCommands().stream()
+                    .map(this::buildDiscordSlashCommandOption)
+                    .toList();
+        } else {
+            options = command.getParameters().stream()
+                    .map(this::buildDiscordSlashCommandOption)
+                    .toList();
+        }
 
         return new SlashCommandBuilder()
                 .setEnabledInDms(false)
@@ -62,12 +71,24 @@ public class SlashCommandSync {
                 .setOptions(options);
     }
 
+    private SlashCommandOption buildDiscordSlashCommandOption(Command command) {
+        List<SlashCommandOption> options = command.getParameters().stream()
+                .map(this::buildDiscordSlashCommandOption)
+                .toList();
+
+        return new SlashCommandOptionBuilder()
+                .setType(SlashCommandOptionType.SUB_COMMAND)
+                .setName(command.getName())
+                .setDescription(command.getDescription())
+                .setOptions(options)
+                .build();
+    }
+
     private SlashCommandOption buildDiscordSlashCommandOption(CommandParameter commandParameter) {
         SlashCommandOptionBuilder slashCommandOptionBuilder = new SlashCommandOptionBuilder()
                 .setName(commandParameter.getName())
                 .setDescription(commandParameter.getDescription())
                 .setRequired(true);
-
         if (commandParameter instanceof NumberCommandParameter) {
             slashCommandOptionBuilder
                     .setType(SlashCommandOptionType.LONG);
@@ -87,6 +108,8 @@ public class SlashCommandSync {
             }
         } else if (commandParameter instanceof UserCommandParameter) {
             slashCommandOptionBuilder.setType(SlashCommandOptionType.USER);
+        } else if (commandParameter instanceof FileCommandParameter) {
+            slashCommandOptionBuilder.setType(SlashCommandOptionType.ATTACHMENT);
         }
 
         return slashCommandOptionBuilder.build();

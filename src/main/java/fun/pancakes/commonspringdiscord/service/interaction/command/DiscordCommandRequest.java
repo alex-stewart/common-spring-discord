@@ -34,6 +34,7 @@ public class DiscordCommandRequest implements CommandRequest {
 
     private final InteractionBase interactionBase;
     private final Command command;
+    private final boolean responded = false;
 
     @Getter
     private final Map<String, String> arguments;
@@ -55,14 +56,23 @@ public class DiscordCommandRequest implements CommandRequest {
     }
 
     public void respondWithError(String response) {
+        if (responded) {
+            log.error("Already responded to {}", interactionBase.getIdAsString());
+        }
         respondWithContent(interactionBase, ResponseColor.ERROR, String.format("%s - Failed", command.getName()), response, true);
     }
 
     public void respondWithSuccess(String response) {
+        if (responded) {
+            log.error("Already responded to {}", interactionBase.getIdAsString());
+        }
         respondWithContent(interactionBase, ResponseColor.SUCCESS, command.getName(), response, command.isResponseHidden());
     }
 
     public void respondWithSimpleText(String response) {
+        if (responded) {
+            log.error("Already responded to {}", interactionBase.getIdAsString());
+        }
         InteractionImmediateResponseBuilder interactionImmediateResponseBuilder = interactionBase.createImmediateResponder()
                 .setContent(response);
 
@@ -81,6 +91,9 @@ public class DiscordCommandRequest implements CommandRequest {
     }
 
     public void respondWithImage(Supplier<BufferedImage> bufferedImageSupplier, String fileName) {
+        if (responded) {
+            log.error("Already responded to {}", interactionBase.getIdAsString());
+        }
         interactionBase.createImmediateResponder()
                 .setContent(fileName)
                 .respond()
@@ -111,6 +124,9 @@ public class DiscordCommandRequest implements CommandRequest {
 
     @Override
     public void respondWithPrompt(CommandPrompt prompt) {
+        if (responded) {
+            log.error("Already responded to {}", interactionBase.getIdAsString());
+        }
         InteractionImmediateResponseBuilder responseBuilder = interactionBase.createImmediateResponder()
                 .setFlags(EnumSet.of(MessageFlag.EPHEMERAL));
 
